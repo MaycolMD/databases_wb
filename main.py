@@ -1,7 +1,8 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, flash
 import pandas as pd
 import matplotlib.pyplot as plt
 import pyodbc
+from pandas.api.types import CategoricalDtype
 
 import io
 from flask import Response
@@ -19,7 +20,7 @@ values_list_data=report_data.values.tolist()
 
 #DESKTOP-61S4LKS\SQLEXPRESS -- maycol server
 #LAPTOP-51FAGA1L -- natalia server
-server = 'LAPTOP-51FAGA1L' # Nombre del server
+server = 'DESKTOP-61S4LKS\SQLEXPRESS' # Nombre del server
 database_name='covid19'
 cnx=pyodbc.connect(driver='{SQL server}', host=server, database=database_name)
 print('succesfull conection')
@@ -46,8 +47,8 @@ def after_request(response):
 
 @web.route('/')
 def principal():
-
-    return render_template('home.html')
+    flash("Need an image")
+    return render_template('index.html')
 
 @web.route('/image')
 def visualize():
@@ -58,22 +59,36 @@ def visualize():
     where d.FechaDiagnostico != 'NO APLICA'
     """
     , cnx)
-    df['month'] = pd.to_datetime(df['FechaDiagnostico']).apply(lambda x: x.month_name())
-    print(df)
-    values = df['month'].value_counts(sort=False).keys().tolist()
-    counts = df['month'].value_counts(sort=False).tolist()
+    dec = 2
+    if dec == 1:
+        df['month'] = pd.to_datetime(df['FechaDiagnostico']).apply(lambda x: x.month_name())
+        df = df.sort_values(by="FechaDiagnostico")
+        values = df['month'].value_counts(sort=False).keys().tolist()
+        counts = df['month'].value_counts(sort=False).tolist()
+    elif dec == 2:
+        cats = [ 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        df['dates'] = pd.to_datetime(df['FechaDiagnostico'])
+        df['day_of_week'] = df['dates'].dt.day_name()
+        cat_type = CategoricalDtype(categories=cats, ordered=True)
+        df['day_of_week'] = df['day_of_week'].astype(cat_type)
+        values = df['day_of_week'].value_counts(sort=False).keys().tolist()
+        counts = df['day_of_week'].value_counts(sort=False).tolist()
     print(values)
     print(counts)
     fig = Figure()
     axis = fig.add_subplot(1, 1, 1)
     xs = values
     ys = counts
-    axis.plot(xs, ys)
+    axis.bar(xs, ys)
     for index in range(len(xs)):
         axis.text(xs[index], ys[index], ys[index], size=10)
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)
     return Response(output.getvalue(), mimetype='image/png')
+
+@web.route('/graficos')
+def graphs():
+    return render_template('graficos.html')
 
 @web.route('/about')
 def about():

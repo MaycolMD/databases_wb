@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RESÚMEN</title>
+    <title>GRÁFICOS</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/normalize.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/style.css')}}">
 </head>
 <body>
     <header class="site-header inicio">
@@ -17,13 +17,13 @@
 
                <a href="/">
                     <p>INICIO</p>
-                </a> 
+                </a>
 
                 <div class="mobile-menu">
                     <a href="#navegacion">
-                        <img src="img/menu.png" alt="">
+                          <img src="{{url_for('static',filename='img/menu.png')}}" alt="">
                     </a>
-                </div>  
+                </div>
 
                 <nav id="navegacion" class="navegacion">
                     <a href="about.html"> Acerca de...</a>
@@ -37,10 +37,14 @@
 
     </header>
 
-    <main class="contenedor">
-        <h1 class="fw-300 centrar-texto">
-            RESÚMEN
-        </h1>
-    </main>
+    <section class="contenedor seccion">
+      <h3 style="text-align: center"> Detección de la enfermedad por mes (2020)</h3>
+      <img src="{{url_for('visualize')}}" class="img-fluid" alt="..." style="display: block; margin-left: auto; margin-right: auto; width: 50%;">
+      <select style="text-align: center; display: block; margin: 0 auto;" class="form-select" aria-label="Default select example">
+        <option selected>Mes</option>
+        <option value="1">Día de la semana</option>
+      </select>
+      <p style="text-align: center">Este gráfico muestra la cantidad de casos reportados (personas) durante el 2020.</p>
+    </section>
 </body>
 </html>

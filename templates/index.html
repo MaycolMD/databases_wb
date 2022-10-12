@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROYECTO COVID19</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/normalize.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/style.css')}}">
+</head>
+<body>
+    <header class="site-header inicio">
+        <div class="contenedor contenido-header">
+            <div class="barra">
+
+               <a href="/">
+                    <p>INICIO</p>
+                </a>
+
+                <div class="mobile-menu">
+                    <a href="#navegacion">
+                        <img src="{{url_for('static',filename='img/menu.png')}}" alt="">
+                    </a>
+                </div>
+
+                <nav id="navegacion" class="navegacion">
+                    <a href="about"> Acerca de...</a>
+                    <a href="graficos">Graficas</a>
+                    <a href="informacion">Resumen de datos</a>
+                </nav>
+
+            </div>
+            <h1>Datos de Covid-19 en el año 2020</h1>
+        </div>
+
+    </header>
+
+    <section class="contenedor seccion">
+
+        <div class="row row-cols-3 row-cols-md-1 g-4">
+          <div class="col-sm-4">
+            <div class="card text-center">
+              <div class="card-body">
+                <img style="padding-bottom: 15px" src="{{url_for('static',filename='img/info.png')}}" width="70px" alt="">
+                <h3 style="color: black" class="card-title">Acerca de este proyecto</h3>
+                <p style="color: black">Página creada para visualización de datos
+                    relacionados con el virus del Covid-19
+                    en el año 2020
+                    Proyecto de enfoque académico</p>
+                <a href="about" class="boton boton-amarillo d-block">Ver Más</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="card text-center">
+              <div class="card-body">
+                <img style="padding-bottom: 15px" src="{{url_for('static',filename='img/grafico.png')}}" width="70px" alt="">
+                <h3 style="color: black" class="card-title">Graficos</h3>
+                <p style=" color: black" style="color: black" class="card-text">Gráficos informativos acordes con los datos propocionados.</p>
+                <a href="graficos" class="boton boton-amarillo d-block">Ver Graficos</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="card text-center">
+              <div class="card-body">
+                <img style="padding-bottom: 15px" src="{{url_for('static',filename='img/imgrep.png')}}" width="70px" alt="">
+                <h3 style="color: black" class="card-title">Resumenes</h3>
+                <p style=" color: black" style="color: black" class="card-text">Información sobre Covid-19 acorde a los datos.</p>
+                  <a href="informacion" class="boton boton-amarillo d-block">Ver Resumen</a>
+              </div>
+            </div>
+          </div>
+        </div>
+    </section>
+
+    <main class="contenenedor seccion">
+
+        <div class="contenedor-anuncios">
+
+            <div class="icono">
+                <h2 class="fw-300 centrar-texto"> Fuente de información</h2>
+                <img style="padding-bottom: 15px" src="{{url_for('static',filename='img/ins.png')}}" alt="">
+                <div class="contenido.anuncio">
+                    <h3>Instituto Nacional de Salud</h3>
+                    <p>Entidad promotora del dataset usado para este proyecto</p>
+                    <a href="https://www.ins.gov.co/Paginas/Boletines-casos-COVID-19-Colombia.aspx" class="boton boton-amarillo d-block">Ver página</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>
