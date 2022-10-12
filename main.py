@@ -17,7 +17,9 @@ web = Flask(__name__)
 report_data=pd.read_csv('./csv/dataset20220808.csv', encoding='latin-1')
 values_list_data=report_data.values.tolist()
 
-server = 'DESKTOP-61S4LKS\SQLEXPRESS' # Nombre del server
+#DESKTOP-61S4LKS\SQLEXPRESS -- maycol server
+#LAPTOP-51FAGA1L -- natalia server
+server = 'LAPTOP-51FAGA1L' # Nombre del server
 database_name='covid19'
 cnx=pyodbc.connect(driver='{SQL server}', host=server, database=database_name)
 print('succesfull conection')
