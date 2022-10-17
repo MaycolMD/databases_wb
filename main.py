@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash
+from flask import Flask, render_template, request, redirect, url_for
 import pandas as pd
 import matplotlib.pyplot as plt
 import pyodbc
@@ -47,11 +47,25 @@ def after_request(response):
 
 @web.route('/')
 def principal():
-    flash("Need an image")
     return render_template('index.html')
 
-@web.route('/image')
-def visualize():
+@web.route("/test" , methods=['GET', 'POST'])
+def test():
+    select = request.form.get('comp_select')
+    return redirect('/graficos/'+str(select))  # just to see what select is
+
+def crearImage(v, c):
+    fig = Figure()
+    axis = fig.add_subplot(1, 1, 1)
+    xs = v
+    ys = c
+    axis.bar(xs, ys)
+    for index in range(len(xs)):
+        axis.text(xs[index], ys[index], ys[index], size=10)
+    return fig, io.BytesIO()
+
+@web.route('/image1')
+def visualize1():
     df = pd.read_sql_query(
     """
     select d.FechaDiagnostico
@@ -59,36 +73,41 @@ def visualize():
     where d.FechaDiagnostico != 'NO APLICA'
     """
     , cnx)
-    dec = 2
-    if dec == 1:
-        df['month'] = pd.to_datetime(df['FechaDiagnostico']).apply(lambda x: x.month_name())
-        df = df.sort_values(by="FechaDiagnostico")
-        values = df['month'].value_counts(sort=False).keys().tolist()
-        counts = df['month'].value_counts(sort=False).tolist()
-    elif dec == 2:
-        cats = [ 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-        df['dates'] = pd.to_datetime(df['FechaDiagnostico'])
-        df['day_of_week'] = df['dates'].dt.day_name()
-        cat_type = CategoricalDtype(categories=cats, ordered=True)
-        df['day_of_week'] = df['day_of_week'].astype(cat_type)
-        values = df['day_of_week'].value_counts(sort=False).keys().tolist()
-        counts = df['day_of_week'].value_counts(sort=False).tolist()
-    print(values)
-    print(counts)
-    fig = Figure()
-    axis = fig.add_subplot(1, 1, 1)
-    xs = values
-    ys = counts
-    axis.bar(xs, ys)
-    for index in range(len(xs)):
-        axis.text(xs[index], ys[index], ys[index], size=10)
-    output = io.BytesIO()
-    FigureCanvas(fig).print_png(output)
-    return Response(output.getvalue(), mimetype='image/png')
+    df['month'] = pd.to_datetime(df['FechaDiagnostico']).apply(lambda x: x.month_name())
+    df = df.sort_values(by="FechaDiagnostico")
+    values = df['month'].value_counts(sort=False).keys().tolist()
+    counts = df['month'].value_counts(sort=False).tolist()
+    createFig, out = crearImage(values, counts)
+    FigureCanvas(createFig).print_png(out)
+    return Response(out.getvalue(), mimetype='image/png')
 
-@web.route('/graficos')
-def graphs():
-    return render_template('graficos.html')
+@web.route('/image2')
+def visualize2():
+    df = pd.read_sql_query(
+    """
+    select d.FechaDiagnostico
+    from dbo.Dataset d
+    where d.FechaDiagnostico != 'NO APLICA'
+    """
+    , cnx)
+    cats = [ 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    df['dates'] = pd.to_datetime(df['FechaDiagnostico'])
+    df['day_of_week'] = df['dates'].dt.day_name()
+    cat_type = CategoricalDtype(categories=cats, ordered=True)
+    df['day_of_week'] = df['day_of_week'].astype(cat_type)
+    values = df['day_of_week'].value_counts(sort=False).keys().tolist()
+    counts = df['day_of_week'].value_counts(sort=False).tolist()
+    createFig, out = crearImage(values, counts)
+    FigureCanvas(createFig).print_png(out)
+    return Response(out.getvalue(), mimetype='image/png')
+
+@web.route('/graficos/<string:dec>')
+def graphs(dec):
+    if int(dec) == 1:
+        inst = 'visualize1'
+    elif int(dec) == 2:
+        inst = 'visualize2'
+    return render_template('graficos.html', inst = inst, dec = int(dec))
 
 @web.route('/about')
 def about():

@@ -38,13 +38,37 @@
     </header>
 
     <section class="contenedor seccion">
-      <h3 style="text-align: center"> Detección de la enfermedad por mes (2020)</h3>
-      <img src="{{url_for('visualize')}}" class="img-fluid" alt="..." style="display: block; margin-left: auto; margin-right: auto; width: 50%;">
-      <select style="text-align: center; display: block; margin: 0 auto;" class="form-select" aria-label="Default select example">
-        <option selected>Mes</option>
-        <option value="1">Día de la semana</option>
-      </select>
-      <p style="text-align: center">Este gráfico muestra la cantidad de casos reportados (personas) durante el 2020.</p>
+      <div class='parent'>
+        <div class='child'>
+          {% if dec == 1  %}
+               <h3 style="text-align: center"> Detección de la enfermedad por mes (2020)</h3>
+          {% else %}
+               <h3 style="text-align: center"> Detección de la enfermedad por día de la semana (2020)</h3>
+          {% endif %}
+          <img src="{{url_for(inst)}}" class="img-fluid" alt="..." style="display: block; margin-left: auto; margin-right: auto; width: 100%;">
+
+          <p style="text-align: center">Este gráfico muestra la cantidad de casos reportados (personas) durante el 2020.</p>
+        </div>
+        <div class='child'>
+          <form class="form-inline" method="POST" action="{{ url_for('test') }}">
+            <div class="form-group">
+              <div class="input-group">
+                      <select name="comp_select" class="selectpicker form-control" style="text-align: center; display: block; margin: 0 auto; height:50px; width:150px;" aria-label="Default select example">
+                        {% if dec == 1  %}
+                          <option value = "1" selected >Mes</option>
+                          <option value = "2">Día de la semana</option>
+                        {% else %}
+                          <option value = "1">Mes</option>
+                          <option value = "2" selected>Día de la semana</option>
+                        {% endif %}
+
+                      </select>
+              </div>
+              <button type="submit" class="boton boton-amarillo d-block" style="height:50px;width:150px">Actualizar</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </section>
 </body>
 </html>

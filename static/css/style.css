@@ -20,6 +20,7 @@ img {
     max-width: 120rem;
     margin: 0 auto;
 }
+
 h1 {
     font-size: 3.8rem;
     color: #fff;
@@ -344,4 +345,16 @@ copyright {
     margin: 0;
     padding: 1rem 0 3rem 0;
     color: #fff;
+}
+
+.parent {
+  margin: 1rem;
+  padding: 2rem 2rem;
+  text-align: center;
+}
+
+.child {
+  display: inline-block;
+  padding: 1rem 1rem;
+  vertical-align: middle;
 }
