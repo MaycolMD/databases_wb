@@ -11,9 +11,12 @@ from matplotlib.figure import Figure
 from flask import Flask
 import numpy as np
 
+from dash import Dash, html, dcc, callback, Input, Output
+
 plt.rcParams["figure.figsize"] = [7.50, 3.50]
 plt.rcParams["figure.autolayout"] = True
 web = Flask(__name__)
+app = Dash(__name__, server=web, url_base_pathname='/')
 
 report_data=pd.read_csv('./csv/dataset20220808.csv', encoding='latin-1')
 values_list_data=report_data.values.tolist()
@@ -116,6 +119,10 @@ def about():
 def not_found(error):
     return render_template('error.html'), 404
     #return redirect(url_for('principal'))
+
+@web.route('/dash')
+def my_dash_app():
+    return app.index()
 
 if __name__ == '__main__':
     web.register_error_handler(404, not_found)
