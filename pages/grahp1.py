@@ -24,7 +24,7 @@ else:
     cursor.executemany("INSERT INTO Dataset VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",values_list_data)
 cursor.commit()
 cursor.close()
-dash.register_page(__name__, path='/')
+dash.register_page(__name__, path='/g1')
 
 
 
@@ -41,7 +41,7 @@ layout = html.Div(children=[
     html.Div(id='dd-output-container'),
 
      dcc.Graph(
-        id='barchart',
+        id='barchart'
     )
 ])
 
