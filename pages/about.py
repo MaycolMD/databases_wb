@@ -43,7 +43,7 @@ dbc.Row(
             [
                 dbc.Col(
                     dbc.CardImg(
-                        src="/static/images/portrait-placeholder.png",
+                        src=dash.get_asset_url('may.png'),
                         className="img-fluid rounded-start",
                     ),
                     className="col-md-4",
@@ -71,7 +71,7 @@ dbc.Row(
             [
                 dbc.Col(
                     dbc.CardImg(
-                        src="/static/images/portrait-placeholder.png",
+                        src=dash.get_asset_url('joc.png'),
                         className="img-fluid rounded-start",
                     ),
                     className="col-md-4",
@@ -99,7 +99,7 @@ dbc.Row(
             [
                 dbc.Col(
                     dbc.CardImg(
-                        src="/static/images/portrait-placeholder.png",
+                        src=dash.get_asset_url('nat.png'),
                         className="img-fluid rounded-start",
                     ),
                     className="col-md-4",

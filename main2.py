@@ -10,7 +10,7 @@ values_list_data=report_data.values.tolist()
 
 #DESKTOP-61S4LKS\SQLEXPRESS -- maycol server
 #LAPTOP-51FAGA1L -- natalia server
-server = 'LAPTOP-51FAGA1L' # Nombre del server
+server = 'DESKTOP-61S4LKS\SQLEXPRESS' # Nombre del server
 database_name='covid19'
 cnx=pyodbc.connect(driver='{SQL server}', host=server, database=database_name)
 print('succesfull conection')
@@ -33,7 +33,7 @@ else:
 cursor.commit()
 cursor.close()
 
-app = Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.VAPOR, dbc.icons.BOOTSTRAP],suppress_callback_exceptions=True)
+app = Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.QUARTZ, dbc.icons.BOOTSTRAP],suppress_callback_exceptions=True)
 app.title = "CoVid Analytics"
 
 app.layout = html.Div(
@@ -58,10 +58,10 @@ app.layout = html.Div(
                                 #dbc.NavItem(dbc.NavLink("Fundamentals", href="/fundamentals")),
                                 dbc.NavItem(dbc.DropdownMenu(
                                         children=[
-                                            dbc.DropdownMenuItem("Diagnosticados por tiempo", href="/g1"),
-											dbc.DropdownMenuItem("Diagnosticados por rango de edad", href="/g3"),
-											dbc.DropdownMenuItem("Diagnosticados por departamento", href="/g4"),
-                                            dbc.DropdownMenuItem("Muertos geográficamente en Colombia", href="/g2")
+                                            dbc.DropdownMenuItem("Diagnosticados por tiempo", href="/g1", style={'fontSize': 11}),
+											dbc.DropdownMenuItem("Diagnosticados por rango de edad", href="/g3", style={'fontSize': 11}),
+											dbc.DropdownMenuItem("Diagnosticados por departamento", href="/g4", style={'fontSize': 11}),
+                                            dbc.DropdownMenuItem("Muertos geográficamente en Colombia", href="/g2", style={'fontSize': 11})
                                         ],
                                         nav=True,
                                         in_navbar=True,
@@ -69,8 +69,8 @@ app.layout = html.Div(
                                 )),
                                 dbc.NavItem(dbc.DropdownMenu(
                                         children=[
-                                            dbc.DropdownMenuItem("¿Quiénes somos?", href="/about"),
-                                            dbc.DropdownMenuItem("Fuente de datos", href="/dssource")
+                                            dbc.DropdownMenuItem("¿Quiénes somos?", href="/about", style={'fontSize': 15}),
+                                            dbc.DropdownMenuItem("Fuente de datos", href="/dssource", style={'fontSize': 15})
                                         ],
                                         nav=True,
                                         in_navbar=True,
@@ -90,9 +90,9 @@ app.layout = html.Div(
                              dbc.Collapse(
                                 dbc.Nav([
                                     dbc.NavItem(dbc.NavLink(html.I(className="bi bi-github"), href="https://github.com/MaycolMD/databases_wb.git",external_link=True) ),
-                                    dbc.NavItem(dbc.NavLink(html.I(className="bi bi bi-twitter"), href="https://twitter.com/splunk_ml",external_link=True) ),
-                                    dbc.Input(type="search", placeholder="Search"),
-                                    dbc.Button( "Search", color="dark", className="ms-2", n_clicks=0 ),
+                                    dbc.NavItem(dbc.NavLink(html.I(className="bi bi bi-twitter"), href="https://twitter.com/INSColombia",external_link=True) ),
+                                    dbc.NavItem(dbc.NavLink(html.I(className="bi bi-facebook"), href="https://www.facebook.com/INSColombia",external_link=True) ),
+                                    dbc.NavItem(dbc.NavLink(html.I(className="bi bi-youtube"), href="https://www.youtube.com/user/INSColombia",external_link=True) ),
                                 ]
                                 ),
                                 id="navbar-collapse",

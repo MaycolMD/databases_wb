@@ -19,7 +19,7 @@ layout = html.Div(children=[
         dbc.CardBody(
             [
                 html.H4("Proyecto Universitario", className="card-title"),
-                html.P("""Nuestro dataset fue sacado de la plataforma Kaggle
+                html.P("""Nuestro dataset fue sacado de la plataforma INS
                 Este dataset consta de +300k registros, con más de 15 columnas cada registro
 """, className="card-text"),
             ]
@@ -35,7 +35,7 @@ dbc.Row(dbc.Col(html.Div([
         style = {'padding-top' : '1%'}
     ),
     )),
-dbc.Button("Dataset", href="/g1", color="primary", size="lg", className="d-grid gap-2 col-6 mx-auto", style={'margin': 15, 'width':"30rem",'fontSize':20}),
+dbc.Button("Dataset", href="https://www.ins.gov.co/Paginas/Boletines-casos-COVID-19-Colombia.aspx", color="primary", size="lg", className="d-grid gap-2 col-6 mx-auto", style={'margin': 15, 'width':"30rem",'fontSize':20}),
 dbc.Row(dbc.Col(html.Div([
         html.H1(children='Para acceder al repositorio donde se encuentra alojado el código de esta web, presione aquí',
                 style = {'textAlign' : 'center'}

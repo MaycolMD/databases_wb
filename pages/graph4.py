@@ -5,7 +5,7 @@ import pyodbc
 import pandas as pd
 import dash_bootstrap_components as dbc
 
-server = 'LAPTOP-51FAGA1L' # Nombre del server
+server = 'DESKTOP-61S4LKS\SQLEXPRESS' # Nombre del server
 database_name='covid19'
 cnx=pyodbc.connect(driver='{SQL server}', host=server, database=database_name)
 print('succesfull conection')
@@ -41,15 +41,13 @@ layout = html.Div(children=[
                     [
                         html.H2("Gráficas", className="display-4"),
                         html.Hr(),
-                        html.P(
-                            "Selecciona la gráfica que deseas ver", className="lead", style={'textAlign': 'center'}
-                        ),
+                        
                         dbc.Nav(
                             [
-                                dbc.NavLink("Diagnosticados por tiempo", href="/g1", active="exact"),
-                                dbc.NavLink("Diagnosticados por rango de edad", href="/g3", active="exact"),
-                                dbc.NavLink("Diagnosticados por departamento", href="/g4", active="exact"),
-                                dbc.NavLink("Muertes geográficamente en Colombia", href="/g2", active="exact")
+                                dbc.NavLink("Diagnosticados por tiempo", href="/g1", active="exact", style={'fontSize': 13, 'textAlign':'center'}),
+                                dbc.NavLink("Diagnosticados por rango de edad", href="/g3", active="exact", style={'fontSize': 13, 'textAlign':'center'}),
+                                dbc.NavLink("Diagnosticados por departamento", href="/g4", active="exact", style={'fontSize': 13, 'textAlign':'center'}),
+                                dbc.NavLink("Muertes geográficamente en Colombia", href="/g2", active="exact", style={'fontSize': 13, 'textAlign':'center'})
                             ],
                             vertical=True,
                             pills=True,
@@ -94,6 +92,7 @@ layout = html.Div([dcc.Location(id="url_n2"), layout, content])
 def update_output_n(value, pathname):
 
     if value == 'Departamento':
+        'entra'
         df = pd.read_sql_query(
             """
             SELECT d.NombreDepartamento, COUNT(*) AS TotalCasosPorDept
@@ -103,8 +102,9 @@ def update_output_n(value, pathname):
             ORDER BY d.NombreDepartamento
 
             """, cnx)
-        values = df['NombreDepartamento'].value_counts(sort=False).keys().tolist()
-        counts = df['TotalCasosPorDept'].value_counts(sort=False).tolist()
+        values = df['NombreDepartamento']
+        counts = df['TotalCasosPorDept']
+        values[3]='San Andrés'
         title = 'Departamentos'
 
     else:
@@ -112,10 +112,10 @@ def update_output_n(value, pathname):
         dept = str('%'+value+'%')
         df = pd.read_sql_query(
         """
-        SELECT d.FechaDiagnostico, d.NombreDepartamento, COUNT(*) AS CasosPorFecha 
-        FROM covid19.dbo.Dataset d 
+        SELECT d.FechaDiagnostico, d.NombreDepartamento, COUNT(*) AS CasosPorFecha
+        FROM covid19.dbo.Dataset d
         WHERE d.FechaDiagnostico NOT LIKE 'No Aplica' AND d.NombreDepartamento LIKE '%s'
-        GROUP BY d.FechaDiagnostico, d.NombreDepartamento 
+        GROUP BY d.FechaDiagnostico, d.NombreDepartamento
         ORDER BY d.FechaDiagnostico ASC
         """ %dept
         , cnx)
@@ -132,10 +132,10 @@ def update_output_n(value, pathname):
 
             if index == 0:
                 index2=0
-            else: 
+            else:
                 index2=sumIndex
                 print(index2)
-                
+
             tope=countsDept[index]+index2
             print(tope)
 
@@ -145,7 +145,7 @@ def update_output_n(value, pathname):
                 index2=index2+1
                 print(index2)
             counts.append(sum)
-                
+
         print(counts)
 
         title = 'Mes'
@@ -155,7 +155,10 @@ def update_output_n(value, pathname):
     ndf[title] = values
     ndf['Diagnosticados']=counts
 
-    barch = px.bar(ndf, x=title, y='Diagnosticados')
+    if value == 'Departamento':
+        barch = px.bar(ndf, x=title, y='Diagnosticados', text_auto='.2s')
+    else:
+        barch = px.bar(ndf, x=title, y='Diagnosticados', text_auto='.2s', color='Mes')
     if pathname == "/g1":
         return html.P(children="Diagnosticados Covid por tiempo", style = {'textAlign' : 'center'}), barch
     elif pathname == "/g2":

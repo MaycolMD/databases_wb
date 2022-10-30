@@ -7,7 +7,7 @@ import requests
 import plotly.express as px
 import dash_bootstrap_components as dbc
 
-server = 'LAPTOP-51FAGA1L' # Nombre del server
+server = 'DESKTOP-61S4LKS\SQLEXPRESS' # Nombre del server
 database_name='covid19'
 cnx=pyodbc.connect(driver='{SQL server}', host=server, database=database_name)
 print('succesfull conection')
@@ -36,7 +36,7 @@ fig = px.choropleth(
     locations='CodigoDepartamento',
     featureidkey = 'properties.DPTO',
     color='Cantidad',
-    color_continuous_scale = "burg",
+    color_continuous_scale = "rainbow",
     hover_name =df['NombreDepartamento']
 )
 
@@ -78,15 +78,12 @@ layout = html.Div(children=[
                     [
                         html.H2("Gráficas", className="display-4"),
                         html.Hr(),
-                        html.P(
-                            "Selecciona la gráfica que deseas ver", className="lead", style={'textAlign': 'center'}
-                        ),
                         dbc.Nav(
                             [
-                                dbc.NavLink("Diagnosticados por tiempo", href="/g1", active="exact"),
-                                dbc.NavLink("Diagnosticados por rango de edad", href="/g3", active="exact"),
-                                dbc.NavLink("Diagnosticados por departamento", href="/g4", active="exact"),
-                                dbc.NavLink("Muertes geográficamente en Colombia", href="/g2", active="exact")
+                                dbc.NavLink("Diagnosticados por tiempo", href="/g1", active="exact", style={'fontSize': 13, 'textAlign':'center'}),
+                                dbc.NavLink("Diagnosticados por rango de edad", href="/g3", active="exact", style={'fontSize': 13, 'textAlign':'center'}),
+                                dbc.NavLink("Diagnosticados por departamento", href="/g4", active="exact", style={'fontSize': 13, 'textAlign':'center'}),
+                                dbc.NavLink("Muertes geográficamente en Colombia", href="/g2", active="exact", style={'fontSize': 13, 'textAlign':'center'})
                             ],
                             vertical=True,
                             pills=True,
@@ -150,4 +147,3 @@ def update_output(pathname):
         ],
         className="p-3 bg-light rounded-3",
     )
-

@@ -6,7 +6,7 @@ import pandas as pd
 import dash_bootstrap_components as dbc
 
 dash.register_page(__name__, path='/g3')
-server = 'LAPTOP-51FAGA1L' # Nombre del server
+server = 'DESKTOP-61S4LKS\SQLEXPRESS' # Nombre del server
 database_name='covid19'
 cnx=pyodbc.connect(driver='{SQL server}', host=server, database=database_name)
 print('succesfull conection')
@@ -42,15 +42,12 @@ layout = html.Div(children=[
                     [
                         html.H2("Gráficas", className="display-4"),
                         html.Hr(),
-                        html.P(
-                            "Selecciona la gráfica que deseas ver", className="lead", style={'textAlign': 'center'}
-                        ),
                         dbc.Nav(
                             [
-                                dbc.NavLink("Diagnosticados por tiempo", href="/g1", active="exact"),
-                                dbc.NavLink("Diagnosticados por rango de edad", href="/g3", active="exact"),
-                                dbc.NavLink("Diagnosticados por departamento", href="/g4", active="exact"),
-                                dbc.NavLink("Muertes geográficamente en Colombia", href="/g2", active="exact")
+                                dbc.NavLink("Diagnosticados por tiempo", href="/g1", active="exact", style={'fontSize': 13, 'textAlign':'center'}),
+                                dbc.NavLink("Diagnosticados por rango de edad", href="/g3", active="exact", style={'fontSize': 13, 'textAlign':'center'}),
+                                dbc.NavLink("Diagnosticados por departamento", href="/g4", active="exact", style={'fontSize': 13, 'textAlign':'center'}),
+                                dbc.NavLink("Muertes geográficamente en Colombia", href="/g2", active="exact", style={'fontSize': 13, 'textAlign':'center'})
                             ],
                             vertical=True,
                             pills=True,
@@ -156,7 +153,7 @@ def update_output(value, pathname):
     ndf['Diagnosticados']=counts
     ndf['Rango'] = values
     print(ndf)
-    barch = px.bar(ndf, x='Diagnosticados', y='Rango', orientation = 'h')
+    barch = px.bar(ndf, x='Diagnosticados', y='Rango', text_auto='.2s', orientation = 'h', color = 'Diagnosticados',color_continuous_scale = "matter")
     if pathname == "/g1":
         return html.P(children="Diagnosticados por tiempo", style = {'textAlign' : 'center'}), barch
     elif pathname == "/g2":

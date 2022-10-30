@@ -19,7 +19,7 @@ first_card = dbc.Card(
             ]
         )
     ]
-, color = 'primary', outline = True, style={"height": "68rem"},)
+, color = 'primary', outline = True, style={'marginBottom': 10})
 
 second_card = dbc.Card(
     [
@@ -30,11 +30,11 @@ second_card = dbc.Card(
                 html.P("""En esta mapa de Colombia, podremos ver la concentración de muertes por departamento
                 en Colombia a causa del Covid-19. \n
                 Ingresa para más detalles.""", style={'textAlign': 'center'}),
-                dbc.Button("Ingresar", color="primary", size="lg", className="d-grid gap-2 col-6 mx-auto", style={'margin': 15}),
+                dbc.Button("Ingresar", href="/g2", color="primary", size="lg", className="d-grid gap-2 col-6 mx-auto", style={'margin': 15}),
             ]
         )
     ]
-, color = 'primary', outline = True, style={"height": "68rem", 'marginBottom': 40})
+, color = 'primary', outline = True)
 
 third_card = dbc.Card(
     [
@@ -45,7 +45,7 @@ third_card = dbc.Card(
                 html.P("""En esta gráfica, podremos ver el comportamiento por rango de edad y género
                 de las personas diagnosticadas con Covid19. \n
                 Ingresa para más detalles.""", style={'textAlign': 'center'}),
-                dbc.Button("Ingresar", color="primary", size="lg", className="d-grid gap-2 col-6 mx-auto", style={'margin': 15}),
+                dbc.Button("Ingresar", href="/g3", color="primary", size="lg", className="d-grid gap-2 col-6 mx-auto", style={'margin': 15}),
             ]
         )
     ]
@@ -55,12 +55,12 @@ fourth_card = dbc.Card(
     [
         dbc.CardBody(
             [
-                dbc.CardImg(src=dash.get_asset_url('g3.png'), top=True, style={'marginBottom': 30}),
+                dbc.CardImg(src=dash.get_asset_url('g4.png'), top=True, style={'marginBottom': 30}),
                 html.H5("Diagnosticados por departamentos", className="card-title", style={'fontSize': 20, 'marginBottom': 20, 'textAlign': 'center'}),
                 html.P("""En esta gráfica, podremos ver el comportamiento por departamento en Colombia
                 de las personas diagnosticadas con Covid19. \n
                 Ingresa para más detalles.""", style={'textAlign': 'center'}),
-                dbc.Button("Ingresar", color="primary", size="lg", className="d-grid gap-2 col-6 mx-auto", style={'margin': 15}),
+                dbc.Button("Ingresar", href="/g4", color="primary", size="lg", className="d-grid gap-2 col-6 mx-auto", style={'margin': 15}),
             ]
         )
     ]
@@ -77,13 +77,13 @@ layout = html.Div(children=[
     dbc.Row(
         [
             dbc.Col(first_card, width=6),
-            dbc.Col(second_card, width=6),
+            dbc.Col(third_card, width=6),
         ]
     ),
     dbc.Row(
         [
-            dbc.Col(third_card, width=6),
             dbc.Col(fourth_card, width=6),
+            dbc.Col(second_card, width=6),
         ]
     )
 ])
