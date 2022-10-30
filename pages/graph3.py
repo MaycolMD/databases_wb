@@ -6,9 +6,11 @@ import pandas as pd
 import dash_bootstrap_components as dbc
 
 dash.register_page(__name__, path='/g3')
-server = 'DESKTOP-61S4LKS\SQLEXPRESS' # Nombre del server
+server = 'tcp:paba.database.windows.net,1433' # Nombre del server
 database_name='covid19'
-cnx=pyodbc.connect(driver='{SQL server}', host=server, database=database_name)
+username = 'maycolsa'
+password = 'sa123456.'
+cnx=pyodbc.connect('DRIVER={ODBC Driver 13 for SQL Server};SERVER='+server+';DATABASE='+database_name+';ENCRYPT=yes;UID='+username+';PWD='+ password)
 print('succesfull conection')
 
 cursor=cnx.cursor()
@@ -153,7 +155,7 @@ def update_output(value, pathname):
     ndf['Diagnosticados']=counts
     ndf['Rango'] = values
     print(ndf)
-    barch = px.bar(ndf, x='Diagnosticados', y='Rango', text_auto='.2s', orientation = 'h', color = 'Diagnosticados',color_continuous_scale = "matter")
+    barch = px.bar(ndf, x='Diagnosticados', y='Rango', text_auto=True, orientation = 'h', color = 'Diagnosticados',color_continuous_scale = "matter", title = value)
     if pathname == "/g1":
         return html.P(children="Diagnosticados por tiempo", style = {'textAlign' : 'center'}), barch
     elif pathname == "/g2":

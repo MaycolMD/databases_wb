@@ -7,9 +7,11 @@ import requests
 import plotly.express as px
 import dash_bootstrap_components as dbc
 
-server = 'DESKTOP-61S4LKS\SQLEXPRESS' # Nombre del server
+server = 'tcp:paba.database.windows.net,1433' # Nombre del server
 database_name='covid19'
-cnx=pyodbc.connect(driver='{SQL server}', host=server, database=database_name)
+username = 'maycolsa'
+password = 'sa123456.'
+cnx=pyodbc.connect('DRIVER={ODBC Driver 13 for SQL Server};SERVER='+server+';DATABASE='+database_name+';ENCRYPT=yes;UID='+username+';PWD='+ password)
 print('succesfull conection')
 
 cursor=cnx.cursor()

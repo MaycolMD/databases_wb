@@ -5,14 +5,16 @@ import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 import pandas as pd
 
-report_data=pd.read_csv('./csv/dataset20200808.csv', encoding='latin-1')
+report_data=pd.read_csv('csv/dataset20200808.csv', encoding='latin-1')
 values_list_data=report_data.values.tolist()
 
 #DESKTOP-61S4LKS\SQLEXPRESS -- maycol server
 #LAPTOP-51FAGA1L -- natalia server
-server = 'DESKTOP-61S4LKS\SQLEXPRESS' # Nombre del server
+server = 'tcp:paba.database.windows.net,1433' # Nombre del server
 database_name='covid19'
-cnx=pyodbc.connect(driver='{SQL server}', host=server, database=database_name)
+username = 'maycolsa'
+password = 'sa123456.'
+cnx=pyodbc.connect('DRIVER={ODBC Driver 13 for SQL Server};SERVER='+server+';DATABASE='+database_name+';ENCRYPT=yes;UID='+username+';PWD='+ password)
 print('succesfull conection')
 
 # Creación de la tabla y obtención de valores

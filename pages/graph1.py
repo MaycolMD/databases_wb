@@ -7,9 +7,11 @@ from pandas.api.types import CategoricalDtype
 import dash_bootstrap_components as dbc
 import os
 
-server = 'DESKTOP-61S4LKS\SQLEXPRESS' # Nombre del server
+server = 'tcp:paba.database.windows.net,1433' # Nombre del server
 database_name='covid19'
-cnx=pyodbc.connect(driver='{SQL server}', host=server, database=database_name)
+username = 'maycolsa'
+password = 'sa123456.'
+cnx=pyodbc.connect('DRIVER={ODBC Driver 13 for SQL Server};SERVER='+server+';DATABASE='+database_name+';ENCRYPT=yes;UID='+username+';PWD='+ password)
 print('succesfull conection')
 
 cursor=cnx.cursor()
@@ -65,6 +67,7 @@ layout = html.Div(children=[
                 dbc.Col(
                 html.Div([
                 dcc.Dropdown(['Fecha', 'Mes', 'Día de la semana'], 'Mes', id='demo-dropdown', style={'marginBottom': 30, 'color': 'black'}),
+                dcc.RadioItems(['Barras','Circular'], 'Barras', id='analytics-inputt3', style = {'textAlign':'center'}, labelStyle = {'marginRight':15}),
                 dbc.Row(dbc.Col(html.Div(id = 'dd-output-container',
                         style = {'padding-top' : '1%', 'fontSize': 25}
                     ),
@@ -89,10 +92,11 @@ layout = html.Div([dcc.Location(id="url"), layout, content])
     [Output('dd-output-container', 'children'),
     Output('barchart', 'figure')],
     [Input('demo-dropdown', 'value'),
+    Input('analytics-inputt3', 'value'),
     Input("url", "pathname")
     ]
 )
-def update_output(value, pathname):
+def update_output(value, valuee, pathname):
 
     df = pd.read_sql_query(
     """
@@ -127,9 +131,12 @@ def update_output(value, pathname):
     ndf['Diagnosticados']=counts
 
     if value == 'Fecha':
-        barch = px.bar(ndf, x=title, y='Diagnosticados',text_auto='.2s')
+        barch = px.bar(ndf, x=title, y='Diagnosticados',text_auto=True)
     else:
-        barch = px.bar(ndf, x=title, y='Diagnosticados',text_auto='.2s',color=title)
+        if valuee == 'Circular':
+            barch = px.pie(ndf,values='Diagnosticados', names=title)
+        else:
+            barch = px.bar(ndf, x=title, y='Diagnosticados',text_auto=True,color=title)
     if pathname == "/g1":
         return html.P(children="Diagnosticados por tiempo", style = {'textAlign' : 'center'}), barch
     elif pathname == "/g2":

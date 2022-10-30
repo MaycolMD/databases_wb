@@ -5,9 +5,11 @@ import pyodbc
 import pandas as pd
 import dash_bootstrap_components as dbc
 
-server = 'DESKTOP-61S4LKS\SQLEXPRESS' # Nombre del server
+server = 'tcp:paba.database.windows.net,1433' # Nombre del server
 database_name='covid19'
-cnx=pyodbc.connect(driver='{SQL server}', host=server, database=database_name)
+username = 'maycolsa'
+password = 'sa123456.'
+cnx=pyodbc.connect('DRIVER={ODBC Driver 13 for SQL Server};SERVER='+server+';DATABASE='+database_name+';ENCRYPT=yes;UID='+username+';PWD='+ password)
 print('succesfull conection')
 
 cursor=cnx.cursor()
@@ -41,7 +43,7 @@ layout = html.Div(children=[
                     [
                         html.H2("Gráficas", className="display-4"),
                         html.Hr(),
-                        
+
                         dbc.Nav(
                             [
                                 dbc.NavLink("Diagnosticados por tiempo", href="/g1", active="exact", style={'fontSize': 13, 'textAlign':'center'}),
@@ -61,7 +63,7 @@ layout = html.Div(children=[
                 ),), width=6),
                 dbc.Col(
                 html.Div([
-                dcc.Dropdown(['Departamento', 'Amazonas', 'Antioquia', 'Arauca', 'Archipiélago de San Andrés Providencia y Santa Catalina', 'Atlántico', 'Barranquilla D.E.', 'Bogotá D.C.', 'Bolívar', 'Boyacá', 'Buenaventura D.E.', 'Caldas', 'Caquetá','Cartagena D.T. y C.', 'Casanare', 'Cauca', 'Cesar', 'Chocó', 'Córdoba', 'Cundinamarca', 'Guainía', 'Guaviare', 'Huila', 'La Guajira', 'Magdalena', 'Meta', 'Nariño', 'Norte de Santander', 'Putumayo', 'Quindío', 'Risaralda', 'Santa Marta D.T. y C.', 'Santander', 'Sucre', 'Tolima', 'Valle del Cauca', 'Vaupés', 'Vichada' ], 'Departamento', id='demo-dropdown-n', style={'marginBottom': 50, 'color': 'black'}),
+                dcc.Dropdown(['Departamento', 'Amazonas', 'Antioquia', 'Arauca', 'San Andrés', 'Atlántico', 'Barranquilla D.E.', 'Bogotá D.C.', 'Bolívar', 'Boyacá', 'Buenaventura D.E.', 'Caldas', 'Caquetá','Cartagena D.T. y C.', 'Casanare', 'Cauca', 'Cesar', 'Chocó', 'Córdoba', 'Cundinamarca', 'Guainía', 'Guaviare', 'Huila', 'La Guajira', 'Magdalena', 'Meta', 'Nariño', 'Norte de Santander', 'Putumayo', 'Quindío', 'Risaralda', 'Santa Marta D.T. y C.', 'Santander', 'Sucre', 'Tolima', 'Valle del Cauca', 'Vaupés', 'Vichada' ], 'Departamento', id='demo-dropdown-n', style={'marginBottom': 50, 'color': 'black'}),
                 dbc.Row(dbc.Col(html.Div(id = 'dd-output-container-n',
                         style = {'padding-top' : '1%', 'fontSize': 25}
                     ),
@@ -90,7 +92,8 @@ layout = html.Div([dcc.Location(id="url_n2"), layout, content])
 )
 
 def update_output_n(value, pathname):
-
+    if value ==  'San Andrés':
+        value = 'Archipiélago de San Andrés Providencia y Santa Catalina'
     if value == 'Departamento':
         'entra'
         df = pd.read_sql_query(
@@ -156,9 +159,9 @@ def update_output_n(value, pathname):
     ndf['Diagnosticados']=counts
 
     if value == 'Departamento':
-        barch = px.bar(ndf, x=title, y='Diagnosticados', text_auto='.2s')
+        barch = px.bar(ndf, x=title, y='Diagnosticados', text_auto=True, title="Departamentos")
     else:
-        barch = px.bar(ndf, x=title, y='Diagnosticados', text_auto='.2s', color='Mes')
+        barch = px.bar(ndf, x=title, y='Diagnosticados', text_auto=True, color='Mes', title=value)
     if pathname == "/g1":
         return html.P(children="Diagnosticados Covid por tiempo", style = {'textAlign' : 'center'}), barch
     elif pathname == "/g2":
