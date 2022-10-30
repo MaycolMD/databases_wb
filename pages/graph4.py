@@ -5,25 +5,13 @@ import pyodbc
 import pandas as pd
 import dash_bootstrap_components as dbc
 
-server = 'DESKTOP-61S4LKS\SQLEXPRESS' # Nombre del server
+server = 'LAPTOP-51FAGA1L' # Nombre del server
 database_name='covid19'
 cnx=pyodbc.connect(driver='{SQL server}', host=server, database=database_name)
 print('succesfull conection')
 
-# Creación de la tabla y obtención de valores
 cursor=cnx.cursor()
-if cursor.tables(table='Dataset', tableType='TABLE').fetchone():
-    print("exists")
-else:
-    cursor.execute("""
-
-        CREATE TABLE Dataset(IdCaso INT PRIMARY KEY, FechaNotificacion DATE, CodigoDepartamento INT, NombreDepartamento VARCHAR(255) , CodigoMunicipio INT, NombreMunicipio VARCHAR(255), Edad INT, Sexo VARCHAR(2), TipoContagio VARCHAR(50), UbicacionCaso VARCHAR(255), EstadoActual VARCHAR(255) NOT NULL, CodigoPaisDeViaje VARCHAR(50), NombrePaisDeViaje VARCHAR(255), FechaInicioSintomas VARCHAR(255), FechaMuerte VARCHAR(255), FechaDiagnostico VARCHAR(255), FechaRecuperacion VARCHAR(50), FechaCargueWeb DATE, TipoRecuperacion VARCHAR(255), PertenenciaEtnica VARCHAR(255), NombreGrupoEtnico VARCHAR(255))
-
-        """)
-
-    cursor.executemany("INSERT INTO Dataset VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",values_list_data)
-cursor.commit()
-cursor.close()
+cursor.tables(table='Dataset', tableType='TABLE').fetchone()
 
 dash.register_page(__name__, path='/g4')
 
@@ -40,7 +28,7 @@ CONTENT_STYLE = {
 
 layout = html.Div(children=[
     dbc.Row(dbc.Col(html.Div([
-            html.H1(children='Diagnosticados por intervalo de tiempo',
+            html.H1(children='Diagnosticados por Departamento',
                     style = {'textAlign' : 'center'}
             )],
             style = {'padding-top' : '1%'}
@@ -75,13 +63,13 @@ layout = html.Div(children=[
                 ),), width=6),
                 dbc.Col(
                 html.Div([
-                dcc.Dropdown(['Fecha', 'Mes', 'Día de la semana'], 'Mes', id='demo-dropdown-n', style={'marginBottom': 30, 'color': 'black'}),
+                dcc.Dropdown(['Departamento', 'Amazonas', 'Antioquia', 'Arauca', 'Archipiélago de San Andrés Providencia y Santa Catalina', 'Atlántico', 'Barranquilla D.E.', 'Bogotá D.C.', 'Bolívar', 'Boyacá', 'Buenaventura D.E.', 'Caldas', 'Caquetá','Cartagena D.T. y C.', 'Casanare', 'Cauca', 'Cesar', 'Chocó', 'Córdoba', 'Cundinamarca', 'Guainía', 'Guaviare', 'Huila', 'La Guajira', 'Magdalena', 'Meta', 'Nariño', 'Norte de Santander', 'Putumayo', 'Quindío', 'Risaralda', 'Santa Marta D.T. y C.', 'Santander', 'Sucre', 'Tolima', 'Valle del Cauca', 'Vaupés', 'Vichada' ], 'Departamento', id='demo-dropdown-n', style={'marginBottom': 50, 'color': 'black'}),
                 dbc.Row(dbc.Col(html.Div(id = 'dd-output-container-n',
                         style = {'padding-top' : '1%', 'fontSize': 25}
                     ),
                     )),
                 html.P("""En esta gráfica, podremos ver un análisis de los contagios en Colombia por departamento.
-                Si desea, puede ... hay q poner más \n
+                Si desea, puede acceder a la información general de todos los departamentos, o filtrar por departamento y conocer los casos registrados \n
                 Para más detalles sobre nuestra fuente de datos, ingrese aquí""", style={'textAlign': 'center'}),
                 dbc.Button("Ver fuente de datos", href="/fuente", color="primary", size="lg", className="d-grid gap-2 col-6 mx-auto", style={'margin': 15}),
                 ],
@@ -105,33 +93,63 @@ layout = html.Div([dcc.Location(id="url_n2"), layout, content])
 
 def update_output_n(value, pathname):
 
-    df = pd.read_sql_query(
-    """
-    select d.FechaDiagnostico
-    from dbo.Dataset d
-    where d.FechaDiagnostico != 'NO APLICA'
-    """
-    , cnx)
+    if value == 'Departamento':
+        df = pd.read_sql_query(
+            """
+            SELECT d.NombreDepartamento, COUNT(*) AS TotalCasosPorDept
+            FROM dbo.Dataset d
+            WHERE d.NombreDepartamento NOT LIKE 'No Aplica' and d.FechaDiagnostico NOT LIKE 'No Aplica'
+            GROUP BY d.NombreDepartamento
+            ORDER BY d.NombreDepartamento
 
-    if value == 'Día de la semana':
-        cats = [ 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-        df['dates'] = pd.to_datetime(df['FechaDiagnostico'])
-        df['day_of_week'] = df['dates'].dt.day_name()
-        cat_type = CategoricalDtype(categories=cats, ordered=True)
-        df['day_of_week'] = df['day_of_week'].astype(cat_type)
-        values = df['day_of_week'].value_counts(sort=False).keys().tolist()
-        counts = df['day_of_week'].value_counts(sort=False).tolist()
-        title = 'Día de la semana'
-    elif value == 'Fecha':
-        values = df['FechaDiagnostico'].value_counts(sort=False).keys().tolist()
-        counts = df['FechaDiagnostico'].value_counts(sort=False).tolist()
-        title = 'Fecha'
+            """, cnx)
+        values = df['NombreDepartamento'].value_counts(sort=False).keys().tolist()
+        counts = df['TotalCasosPorDept'].value_counts(sort=False).tolist()
+        title = 'Departamentos'
+
     else:
+
+        dept = str('%'+value+'%')
+        df = pd.read_sql_query(
+        """
+        SELECT d.FechaDiagnostico, d.NombreDepartamento, COUNT(*) AS CasosPorFecha 
+        FROM covid19.dbo.Dataset d 
+        WHERE d.FechaDiagnostico NOT LIKE 'No Aplica' AND d.NombreDepartamento LIKE '%s'
+        GROUP BY d.FechaDiagnostico, d.NombreDepartamento 
+        ORDER BY d.FechaDiagnostico ASC
+        """ %dept
+        , cnx)
+
         df['month'] = pd.to_datetime(df['FechaDiagnostico']).apply(lambda x: x.month_name())
         df = df.sort_values(by="FechaDiagnostico")
         values = df['month'].value_counts(sort=False).keys().tolist()
-        counts = df['month'].value_counts(sort=False).tolist()
+        countsDept = df['month'].value_counts(sort=False).tolist()
+
+        counts = []
+        sumIndex=0
+        for index in range (len(countsDept)):
+            sum = 0
+
+            if index == 0:
+                index2=0
+            else: 
+                index2=sumIndex
+                print(index2)
+                
+            tope=countsDept[index]+index2
+            print(tope)
+
+            while index2<tope:
+                sum = sum + df['CasosPorFecha'][index2]
+                sumIndex=sumIndex+1
+                index2=index2+1
+                print(index2)
+            counts.append(sum)
+                
+        print(counts)
+
         title = 'Mes'
+
 
     ndf = pd.DataFrame()
     ndf[title] = values

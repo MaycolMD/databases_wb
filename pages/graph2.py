@@ -7,25 +7,13 @@ import requests
 import plotly.express as px
 import dash_bootstrap_components as dbc
 
-server = 'DESKTOP-61S4LKS\SQLEXPRESS' # Nombre del server
+server = 'LAPTOP-51FAGA1L' # Nombre del server
 database_name='covid19'
 cnx=pyodbc.connect(driver='{SQL server}', host=server, database=database_name)
 print('succesfull conection')
 
-# Creación de la tabla y obtención de valores
 cursor=cnx.cursor()
-if cursor.tables(table='Dataset', tableType='TABLE').fetchone():
-    print("exists")
-else:
-    cursor.execute("""
-
-        CREATE TABLE Dataset(IdCaso INT PRIMARY KEY, FechaNotificacion DATE, CodigoDepartamento INT, NombreDepartamento VARCHAR(255) , CodigoMunicipio INT, NombreMunicipio VARCHAR(255), Edad INT, Sexo VARCHAR(2), TipoContagio VARCHAR(50), UbicacionCaso VARCHAR(255), EstadoActual VARCHAR(255) NOT NULL, CodigoPaisDeViaje VARCHAR(50), NombrePaisDeViaje VARCHAR(255), FechaInicioSintomas VARCHAR(255), FechaMuerte VARCHAR(255), FechaDiagnostico VARCHAR(255), FechaRecuperacion VARCHAR(50), FechaCargueWeb DATE, TipoRecuperacion VARCHAR(255), PertenenciaEtnica VARCHAR(255), NombreGrupoEtnico VARCHAR(255))
-
-        """)
-
-    cursor.executemany("INSERT INTO Dataset VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",values_list_data)
-cursor.commit()
-cursor.close()
+cursor.tables(table='Dataset', tableType='TABLE').fetchone()
 
 df = pd.read_sql_query(
 """
@@ -162,3 +150,4 @@ def update_output(pathname):
         ],
         className="p-3 bg-light rounded-3",
     )
+
