@@ -1,21 +1,27 @@
 import dash
 from dash import html, dcc, callback, Input, Output
 import pyodbc
-
+import pymssql
 import pandas as pd
 import requests
 import plotly.express as px
 import dash_bootstrap_components as dbc
 
-server = 'tcp:paba.database.windows.net,1433' # Nombre del server
+
+server_name = 'paba.database.windows.net' # Nombre del server
 database_name='covid19'
-username = 'maycolsa'
-password = 'sa123456.'
-cnx=pyodbc.connect('DRIVER={ODBC Driver 13 for SQL Server};SERVER='+server+';DATABASE='+database_name+';ENCRYPT=yes;UID='+username+';PWD='+ password)
+username = 'maycolsa@paba'
+password1 = 'sa123456.'
+cnx = pymssql.connect(
+    server=server_name,
+    user=username,
+    password=password1,
+    database=database_name
+)
+
 print('succesfull conection')
 
 cursor=cnx.cursor()
-cursor.tables(table='Dataset', tableType='TABLE').fetchone()
 
 df = pd.read_sql_query(
 """
@@ -139,7 +145,7 @@ def update_output(pathname):
     elif pathname == "/g3":
         return html.P(children="Covid por género", style = {'textAlign' : 'center'})
     elif pathname == "/g4":
-        return html.P(children="Covid por departamento", style = {'textAlign' : 'center'}), barch
+        return html.P(children="Covid por departamento", style = {'textAlign' : 'center'})
     # If the user tries to reach a different page, return a 404 message
     return html.Div(
         [

@@ -4,38 +4,32 @@ import pyodbc
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 import pandas as pd
+import pymssql
 
 report_data=pd.read_csv('csv/dataset20200808.csv', encoding='latin-1')
 values_list_data=report_data.values.tolist()
 
 #DESKTOP-61S4LKS\SQLEXPRESS -- maycol server
 #LAPTOP-51FAGA1L -- natalia server
-server = 'tcp:paba.database.windows.net,1433' # Nombre del server
+
+server_name = 'paba.database.windows.net' # Nombre del server
 database_name='covid19'
-username = 'maycolsa'
-password = 'sa123456.'
-cnx=pyodbc.connect('DRIVER={ODBC Driver 13 for SQL Server};SERVER='+server+';DATABASE='+database_name+';ENCRYPT=yes;UID='+username+';PWD='+ password)
+username = 'maycolsa@paba'
+password1 = 'sa123456.'
+cnx = pymssql.connect(
+    server=server_name,
+    user=username,
+    password=password1,
+    database=database_name
+)
 print('succesfull conection')
 
 # Creación de la tabla y obtención de valores
 cursor=cnx.cursor()
-if cursor.tables(table='Dataset', tableType='TABLE').fetchone():
-    print("exists")
-else:
-    print("No existe la tabla buscada. \n Procede a crearse ...")
-    cursor.execute("""
-
-        CREATE TABLE Dataset(IdCaso INT PRIMARY KEY, FechaNotificacion DATE, CodigoDepartamento INT, NombreDepartamento VARCHAR(255) , CodigoMunicipio INT, NombreMunicipio VARCHAR(255), Edad INT, Sexo VARCHAR(2), TipoContagio VARCHAR(50), UbicacionCaso VARCHAR(255), EstadoActual VARCHAR(255) NOT NULL, CodigoPaisDeViaje VARCHAR(50), NombrePaisDeViaje VARCHAR(255), FechaInicioSintomas VARCHAR(255), FechaMuerte VARCHAR(255), FechaDiagnostico VARCHAR(255), FechaRecuperacion VARCHAR(50), FechaCargueWeb DATE, TipoRecuperacion VARCHAR(255), PertenenciaEtnica VARCHAR(255), NombreGrupoEtnico VARCHAR(255))
-
-        """)
-    print("Tabla creada exitósamente")
-    print("Se procede a inserción de datos ... ")
-    cursor.executemany("INSERT INTO Dataset VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",values_list_data)
-    print("Inserción completada!")
-cursor.commit()
-cursor.close()
 
 app = Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.QUARTZ, dbc.icons.BOOTSTRAP],suppress_callback_exceptions=True)
+server = app.server
+
 app.title = "CoVid Analytics"
 
 app.layout = html.Div(
@@ -126,6 +120,6 @@ def toggle_navbar_collapse(n, is_open):
     return is_open
 
 if __name__ == '__main__':
-	app.run_server(debug=True)
-
+    app.run_server(debug=True)
+cursor.close()
 cnx.close()
