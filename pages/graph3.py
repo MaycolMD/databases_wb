@@ -77,7 +77,7 @@ layout = html.Div(children=[
                 html.P("""En esta gráfica, podremos ver un análisis de los contagios por rangos de edades en Colombia durante el 2020.
                 Esta gráfica puede filtrarse para obtener solo datos por género, presionando en el filtro que se desee en la parte superior. Por defecto muestra ambos géneros. \n
                 Para más detalles sobre nuestra fuente de datos, ingrese aquí""", style={'textAlign': 'center'}),
-                dbc.Button("Ver fuente de datos", href="/fuente", color="primary", size="lg", className="d-grid gap-2 col-6 mx-auto", style={'margin': 15}),
+                dbc.Button("Ver fuente de datos", href="/dssource", color="primary", size="lg", className="d-grid gap-2 col-6 mx-auto", style={'margin': 15}),
                 ],
 
                 ), width=2, style={'marginLeft': 30}),

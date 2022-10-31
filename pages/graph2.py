@@ -114,7 +114,7 @@ layout = html.Div(children=[
                 el año 2020. Si coloca su ratón sobre algún departamento, tendrá más información sobre este,
                 como su Nombre, Código y cantidad de muertos allí. Puede acercarse en el gráfico con la rueda del ratón. \n
                 Para más detalles sobre nuestra fuente de datos, ingrese aquí""", style={'textAlign': 'center'}),
-                dbc.Button("Ver fuente de datos", href="/fuente", color="primary", size="lg", className="d-grid gap-2 col-6 mx-auto", style={'margin': 15}),
+                dbc.Button("Ver fuente de datos", href="/dssource", color="primary", size="lg", className="d-grid gap-2 col-6 mx-auto", style={'margin': 15}),
                 html.P("Para obtener información sobre el GeoJson utilizado, ingrese aquí""", style={'textAlign': 'center'}),
                 dbc.Button("GeoJson Colombia", href="https://gist.github.com/john-guerra/43c7656821069d00dcbc", color="primary", size="lg", className="d-grid gap-2 col-6 mx-auto", style={'margin': 15}),
 

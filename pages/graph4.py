@@ -76,7 +76,7 @@ layout = html.Div(children=[
                 html.P("""En esta gráfica, podremos ver un análisis de los contagios en Colombia por departamento.
                 Si desea, puede acceder a la información general de todos los departamentos, o filtrar por departamento y conocer los casos registrados \n
                 Para más detalles sobre nuestra fuente de datos, ingrese aquí""", style={'textAlign': 'center'}),
-                dbc.Button("Ver fuente de datos", href="/fuente", color="primary", size="lg", className="d-grid gap-2 col-6 mx-auto", style={'margin': 15}),
+                dbc.Button("Ver fuente de datos", href="/dssource", color="primary", size="lg", className="d-grid gap-2 col-6 mx-auto", style={'margin': 15}),
                 ],
 
                 ), width=2, style={'marginLeft': 30}),

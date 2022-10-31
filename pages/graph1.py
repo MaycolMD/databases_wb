@@ -80,7 +80,7 @@ layout = html.Div(children=[
                 y día de la semana en Colombia durante el año 2020. Para ajustar la medida de tiempo por la cual se desea
                 ver el gráfico ajuste la ventana desplegable con la que desee. \n
                 Para más detalles sobre nuestra fuente de datos, ingrese aquí""", style={'textAlign': 'center'}),
-                dbc.Button("Ver fuente de datos", href="/fuente", color="primary", size="lg", className="d-grid gap-2 col-6 mx-auto", style={'margin': 15}),
+                dbc.Button("Ver fuente de datos", href="/dssource", color="primary", size="lg", className="d-grid gap-2 col-6 mx-auto", style={'margin': 15}),
                 ],
 
                 ), width=2, style={'marginLeft': 30}),
